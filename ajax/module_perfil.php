@@ -34,7 +34,7 @@
       <div class="panel-body">
         <ul class="nav nav-pills nav-stacked">
         	<?php foreach ($hijos as $count => $valor): ?>
-            <li class="lista" style="text-align: left;padding-left: 10%;padding-top: 10px;padding-bottom: 10px;background: #28d6ae"><?php echo utf8_encode($valor['descripcion']) ?> <input type="checkbox" style="position: absolute;right: 70%" class="chequeado" id="<?php echo $valor['id'] ?>"></li>
+            <li class="lista" style="text-align: left;padding-left: 10%;padding-top: 10px;padding-bottom: 10px;background: #28d6ae"><?php echo utf8_encode($valor['descripcion']) ?> <input type="checkbox" style="position: absolute;right: 70%" class="chequeado" item="<?php echo $value['id'] ?>" id="<?php echo $valor['id'] ?>"></li>
             <?php endforeach; ?>
         </ul>
                     
@@ -45,13 +45,45 @@
   <?php endforeach; ?>
 </div>
 
+<div id="hp">
+	
+</div>
+
 
 <script>
 	$(".chequeado").click(function(){
 		if ($(this).is(':checked')) {
-			alert("el checkbox con valor "+ $(this).attr("id") + " ha sido seleccionado");
+			padre = $(this).attr("item");
+			hijo = $(this).attr("id");
+			datos = {padre : padre, hijo : hijo};
+			ruta = "<?php echo RUTA ?>ajax/insert-permiso.php";
+			$.ajax({
+				data : datos,
+				url : ruta,
+				type : 'post',
+				beforeSend : function(){
+					$("#hp").html("hola");
+				},
+				success : function(response){
+					$("#hp").html(response);
+				}
+			});
 		}else{
-			alert("el checkbox con valor "+ $(this).attr("id") + " ha sido deseleccionado");
+			padre = $(this).attr("item");
+			hijo = $(this).attr("id");
+			datos = {padre : padre, hijo : hijo};
+			ruta = "<?php echo RUTA ?>ajax/actualizar-permiso.php";
+			$.ajax({
+				data : datos,
+				url : ruta,
+				type : 'post',
+				beforeSend : function(){
+					$("#hp").html("hola");
+				},
+				success : function(response){
+					$("#hp").html(response);
+				}
+			});
 		}
 	});
 </script>
