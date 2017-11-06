@@ -17,6 +17,10 @@
 		return $resultado = $consulta -> fetchAll();
 	}
 
+	$per = $conexion-> prepare("SELECT * FROM restricciones");
+	$per -> execute();
+	$res = $per ->fetchAll();
+
  ?>
 <div class="panel-group" id="accordion">
 	<?php foreach ($mod_padre as $key => $value): ?>
@@ -34,7 +38,16 @@
       <div class="panel-body">
         <ul class="nav nav-pills nav-stacked">
         	<?php foreach ($hijos as $count => $valor): ?>
-            <li class="lista" style="text-align: left;padding-left: 10%;padding-top: 10px;padding-bottom: 10px;background: #28d6ae"><?php echo utf8_encode($valor['descripcion']) ?> <input type="checkbox" style="position: absolute;right: 70%" class="chequeado" item="<?php echo $value['id'] ?>" id="<?php echo $valor['id'] ?>"></li>
+            <li class="lista" style="text-align: left;padding-left: 10%;padding-top: 10px;padding-bottom: 10px;background: #28d6ae"><?php echo utf8_encode($valor['descripcion']) ?> <input type="checkbox" style="margin-right: 50px" class="chequeado" item="<?php echo $value['id'] ?>" id="<?php echo $valor['id'] ?>">
+            	<?php foreach ($res as $cant => $valu): ?>
+            		<?php if ($cant == 0): ?>
+            			<?php echo $valu['descripcion'] ?><input type="checkbox" item1="<?php echo $valu['id'].''.$valor['id'] ?>" class="horas">
+            		<?php else: ?>
+						<?php echo $valu['descripcion'] ?><input type="checkbox" item="<?php echo $valu['id'] ?>" class="hora">
+            		<?php endif; ?>
+            	<?php endforeach; ?>
+
+            </li>
             <?php endforeach; ?>
         </ul>
                     
@@ -51,8 +64,12 @@
 
 
 <script>
+	
 	$(".chequeado").click(function(){
 		if ($(this).is(':checked')) {
+			
+			$(".horas").prop('checked',true).attr("disabled", true);
+			
 			padre = $(this).attr("item");
 			hijo = $(this).attr("id");
 			datos = {padre : padre, hijo : hijo};
@@ -69,6 +86,9 @@
 				}
 			});
 		}else{
+			
+			$(".horas").prop('checked',false).removeAttr("disabled");
+			
 			padre = $(this).attr("item");
 			hijo = $(this).attr("id");
 			datos = {padre : padre, hijo : hijo};

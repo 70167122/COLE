@@ -1,6 +1,6 @@
 <?php 
 
-define('RUTA','http://localhost/colegio/');
+define('RUTA','http://localhost/COLE/');
 
 
 
