@@ -17,6 +17,20 @@
 		return $resultado = $consulta -> fetchAll();
 	}
 
+	function comprobar_modulo($conexion,$id,$perfil){
+		$consulta = $conexion -> prepare("SELECT * FROM restricciones_perfiles WHERE modulo_id = $id AND perfil_id = $perfil");
+		$consulta -> execute();
+
+		return $resultado = $consulta -> fetchAll();
+	}
+
+	function comprobar_modulo_permiso($conexion,$id,$perfil,$permiso){
+		$consulta = $conexion -> prepare("SELECT * FROM restricciones_perfiles WHERE modulo_id = $id AND perfil_id = $perfil AND restriccion_id = $permiso");
+		$consulta -> execute();
+
+		return $resultado = $consulta -> fetchAll();
+	}
+
 	$per = $conexion-> prepare("SELECT * FROM restricciones");
 	$per -> execute();
 	$res = $per ->fetchAll();
@@ -38,16 +52,22 @@
       <div class="panel-body">
         <ul class="nav nav-pills nav-stacked">
         	<?php foreach ($hijos as $count => $valor): ?>
-            <li class="lista" style="text-align: left;padding-left: 10%;padding-top: 10px;padding-bottom: 10px;background: #28d6ae"><?php echo utf8_encode($valor['descripcion']) ?> <input type="checkbox" style="margin-right: 50px" class="chequeado" item="<?php echo $value['id'] ?>" id="<?php echo $valor['id'] ?>">
+            <li class="lista" style="text-align: left;padding-left: 10%;padding-top: 10px;padding-bottom: 10px;background: #28d6ae"><?php echo utf8_encode($valor['descripcion']) ?> <input type="checkbox" style="margin-right: 50px" class="chequeado" item="<?php echo $value['id'] ?>" id="<?php echo $valor['id'] ?>" <?php $com_mo = comprobar_modulo($conexion,$valor['id'],$id);if ($com_mo!=false) {
+            	echo "checked";
+            } ?>>
             	<?php foreach ($res as $cant => $valu): ?>
             		<div class="ver<?php echo $valor['id']?>" style="display: inline;">
             			<?php if ($cant == 0): ?>
             				<div class="primer<?php echo $valor['id']?>" style="display: inline;">
-            					<?php echo $valu['descripcion'] ?><input type="checkbox" item="<?php echo $valu['id'] ?>" disabled>
+            					<?php echo $valu['descripcion'] ?><input type="checkbox" item="<?php echo $valu['id'] ?>" <?php $com_per = comprobar_modulo_permiso($conexion,$valor['id'],$id,$valu['id']); if ($com_per != false) {
+            						echo "checked";
+            					} ?> disabled>
             				</div>
             				
             			<?php else: ?>
-            				<?php echo $valu['descripcion'] ?><input type="checkbox" items="<?php echo $valor['id'] ?>" item="<?php echo $valu['id'] ?>" class="hora" disabled>
+            				<?php echo $valu['descripcion'] ?><input type="checkbox" items="<?php echo $valor['id'] ?>" item="<?php echo $valu['id'] ?>" class="hora" <?php $c_p = comprobar_modulo_permiso($conexion,$valor['id'],$id,$valu['id']); if ($c_p != false) {
+            					echo "checked";
+            				} ?> >
             			<?php endif; ?>
             		</div>
 					            		
