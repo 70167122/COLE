@@ -5,13 +5,12 @@
 
 	$conexion = conectar();
 
-	$padre = $_POST['padre'];
 
-	$hijo = $_POST['hijo'];
+	$hijo = $_POST['modulo'];
 
 	$perfil = $_POST['perfil'];
 
-	$permiso = 1;
+	$permiso = $_POST['num'];
 
 	$creado = date("Y-m-d H:i:s");
 

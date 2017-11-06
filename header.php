@@ -1,22 +1,34 @@
 <?php 
-
-
- /* $per = $_SESSION['perfil_id'];
-  $query = $conexion -> prepare("SELECT
+  $perfil = $_SESSION['perfil_id'];
+  $padre = $conexion -> prepare("SELECT
   restricciones_perfiles.perfil_id,
   restricciones_perfiles.restriccion_id,
-  restricciones_perfiles.modulo_id,
-  modulos.idpadre,
+  modulos.id,
   modulos.descripcion,
-  modulos.url,
-  restricciones.descripcion
+  modulos.idpadre
   FROM
   restricciones_perfiles
   INNER JOIN restricciones ON restricciones_perfiles.restriccion_id = restricciones.id
   INNER JOIN perfiles ON restricciones_perfiles.perfil_id = perfiles.id
   INNER JOIN modulos ON restricciones_perfiles.modulo_id = modulos.id
-  WHERE modulos.idpadre = 0 AND restricciones_perfiles.perfil_id = $per
-  GROUP BY modulos.descripcion");*/
+  WHERE restricciones_perfiles.perfil_id = $perfil
+  GROUP BY modulos.idpadre
+  ORDER BY modulos.id ASC");
+
+  $padre -> execute();
+
+  $padres = $padre -> fetchAll();
+
+  $mo = ['administracion',''];
+
+
+  function padres($conexion,$id){
+    $consulta = $conexion -> prepare("SELECT * FROM modulos WHERE id = $id");
+    $consulta -> execute();
+    return $resultado = $consulta -> fetch();
+  }
+
+
 
  ?>
 
